@@ -57,11 +57,31 @@ import org.junit.jupiter.api.Test;
 
 class GenerateTest {
 
-    @Test void throwsCorrectly() {
+    @Test void solvesOfficialAnswers() {
 """)
 
-def escape_string(s):
-    return s.replace('\\', '\\\\').replace("\n", "\\n").replace('"', '\\"')
+def escape_and_quote_string(s):
+    def escape_string(s):
+        return s.replace('\\', '\\\\').replace("\n", "\\n").replace('"', '\\"')
+
+    if len(s) < 50000:
+        return '"' + escape_string(s) + '"'
+
+    max_len = 50000
+    chunks = [s[i:i+max_len] for i in range(0, len(s), max_len)]
+
+    result = 'new StringBuilder('
+    first = True
+    for chunk in chunks:
+        if first:
+            first = False
+        else:
+            result += '.append('
+        result += '"' + escape_string(chunk) + '")'
+    result += '.toString()'
+
+    return result
+
 
 for year in years:
     for day in days:
@@ -89,9 +109,9 @@ for year in years:
                 if day == 25 and part == 2:
                     continue
                 answer = puzzle.answer_a if part == 1 else puzzle.answer_b
-                escaped_answer = escape_string(answer)
-                escaped_input = escape_string(input_data)
-                print(f'        Assertions.assertEquals("{escaped_answer}", Solver.solve({year}, {day}, {part}, "{escaped_input}"));')
+                escaped_answer = escape_and_quote_string(answer)
+                escaped_input = escape_and_quote_string(input_data)
+                print(f'        Assertions.assertEquals({escaped_answer}, Solver.solve({year}, {day}, {part}, {escaped_input}));')
 
 print("""    }
 
