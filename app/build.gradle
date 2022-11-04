@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.fornwall:aoc:2019.12.462'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    implementation 'net.fornwall:aoc:+'
+    testImplementation 'org.junit.jupiter:junit-jupiter:+'
 }
 
 application {
