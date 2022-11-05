@@ -18,4 +18,7 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
-    - run: GRADLE_OPTS='-Xmx2048m' ./gradlew test --info
+    - run: ./gradlew test --info
+      env:
+        GRADLE_OPTS: -Xmx2048m
+
