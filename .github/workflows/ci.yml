@@ -19,6 +19,4 @@ jobs:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
     - run: ./gradlew test --info
-      env:
-        GRADLE_OPTS: -Xmx1024m
 
