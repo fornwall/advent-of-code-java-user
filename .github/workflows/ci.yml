@@ -22,4 +22,8 @@ jobs:
       env:
         GRADLE_OPTS: -Xmx1024m
 
-
+  test-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: ./run-docker-test.sh
