@@ -18,9 +18,9 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
-    - run: ./gradlew test --info
+    - run: ./gradlew --no-daemon test --info
       env:
-        GRADLE_OPTS: -Xmx1024m
+        GRADLE_OPTS: -Xmx2048m
 
   test-docker:
     runs-on: ubuntu-latest
