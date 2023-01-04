@@ -58,8 +58,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class GenerateTest {
-
-    @Test void solvesOfficialAnswers() {
 """, file=generated_file)
 
 def escape_and_quote_string(s):
@@ -86,6 +84,7 @@ def escape_and_quote_string(s):
 
 
 for year in years:
+    print(f"    @Test void solvesOfficialAnswers{year}() {{", file=generated_file);
     for day in days:
         cached_inputs = {}
         for session in SESSIONS:
@@ -114,9 +113,7 @@ for year in years:
                 escaped_answer = escape_and_quote_string(answer)
                 escaped_input = escape_and_quote_string(input_data)
                 print(f'        Assertions.assertEquals({escaped_answer}, Solver.solve({year}, {day}, {part}, {escaped_input}));', file=generated_file)
+    print("    }\n", file=generated_file)
 
-print("""    }
-
-}
-""", file=generated_file)
+print("}", file=generated_file)
 
