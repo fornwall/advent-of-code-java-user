@@ -26,7 +26,7 @@ if "AOC_YEAR" in os.environ:
     else:
         years = [int(years_string)]
 else:
-    years = [2015, 2016, 2017, 2018, 2019, 2020, 2021]
+    years = range(2015, 2023)
 
 if "AOC_DAY" in os.environ:
     days_string = os.environ["AOC_DAY"]
@@ -48,6 +48,8 @@ if "AOC_ACCOUNT" in os.environ:
 else:
     account = "*"
 
+generated_file = open("app/src/test/java/advent/of/code/java/user/GeneratedTest.java", "w")
+
 print("""package advent.of.code.java.user;
 
 import net.fornwall.aoc.Solver;
@@ -58,7 +60,7 @@ import org.junit.jupiter.api.Test;
 class GenerateTest {
 
     @Test void solvesOfficialAnswers() {
-""")
+""", file=generated_file)
 
 def escape_and_quote_string(s):
     def escape_string(s):
@@ -111,10 +113,10 @@ for year in years:
                 answer = puzzle.answer_a if part == 1 else puzzle.answer_b
                 escaped_answer = escape_and_quote_string(answer)
                 escaped_input = escape_and_quote_string(input_data)
-                print(f'        Assertions.assertEquals({escaped_answer}, Solver.solve({year}, {day}, {part}, {escaped_input}));')
+                print(f'        Assertions.assertEquals({escaped_answer}, Solver.solve({year}, {day}, {part}, {escaped_input}));', file=generated_file)
 
 print("""    }
 
 }
-""")
+""", file=generated_file)
 
