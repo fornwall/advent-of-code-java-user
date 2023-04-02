@@ -48,9 +48,12 @@ if "AOC_ACCOUNT" in os.environ:
 else:
     account = "*"
 
-generated_file = open("app/src/test/java/advent/of/code/java/user/GeneratedTest.java", "w")
+generated_file = open(
+    "app/src/test/java/advent/of/code/java/user/GeneratedTest.java", "w"
+)
 
-print("""package advent.of.code.java.user;
+print(
+    """package advent.of.code.java.user;
 
 import net.fornwall.aoc.Solver;
 import net.fornwall.aoc.SolverException;
@@ -58,38 +61,41 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class GenerateTest {
-""", file=generated_file)
+""",
+    file=generated_file,
+)
+
 
 def escape_and_quote_string(s):
     def escape_string(s):
-        return s.replace('\\', '\\\\').replace("\n", "\\n").replace('"', '\\"')
+        return s.replace("\\", "\\\\").replace("\n", "\\n").replace('"', '\\"')
 
     if len(s) < 50000:
         return '"' + escape_string(s) + '"'
 
     max_len = 50000
-    chunks = [s[i:i+max_len] for i in range(0, len(s), max_len)]
+    chunks = [s[i : i + max_len] for i in range(0, len(s), max_len)]
 
-    result = 'new StringBuilder('
+    result = "new StringBuilder("
     first = True
     for chunk in chunks:
         if first:
             first = False
         else:
-            result += '.append('
+            result += ".append("
         result += '"' + escape_string(chunk) + '")'
-    result += '.toString()'
+    result += ".toString()"
 
     return result
 
 
 for year in years:
-    print(f"    @Test void solvesOfficialAnswers{year}() {{", file=generated_file);
+    print(f"    @Test void solvesOfficialAnswers{year}() {{", file=generated_file)
     for day in days:
         cached_inputs = {}
         for session in SESSIONS:
             session_cookie = session["cookie"]
-            if session_cookie == 'TODO':
+            if session_cookie == "TODO":
                 continue
             session_description = session["description"]
             if not (account == "*" or account == session_description):
@@ -102,7 +108,10 @@ for year in years:
             input_data = puzzle.input_data
 
             if input_data in cached_inputs:
-                print("Skipping - input already seen for " + cached_inputs[input_data], file=sys.stderr)
+                print(
+                    "Skipping - input already seen for " + cached_inputs[input_data],
+                    file=sys.stderr,
+                )
                 continue
             cached_inputs[input_data] = session_description
 
@@ -112,8 +121,10 @@ for year in years:
                 answer = puzzle.answer_a if part == 1 else puzzle.answer_b
                 escaped_answer = escape_and_quote_string(answer)
                 escaped_input = escape_and_quote_string(input_data)
-                print(f'        Assertions.assertEquals({escaped_answer}, Solver.solve({year}, {day}, {part}, {escaped_input}));', file=generated_file)
+                print(
+                    f"        Assertions.assertEquals({escaped_answer}, Solver.solve({year}, {day}, {part}, {escaped_input}));",
+                    file=generated_file,
+                )
     print("    }\n", file=generated_file)
 
 print("}", file=generated_file)
-
